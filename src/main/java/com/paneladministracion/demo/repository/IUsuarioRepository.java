@@ -1,17 +1,9 @@
 package com.paneladministracion.demo.repository;
 
 import com.paneladministracion.demo.models.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
 
-public interface IUsuarioRepository {
-
-    List<Usuario> obtenerUsuarios();
-
-    void eliminarUsuario(Long id);
-
-    void registrarUsuario(Usuario usuario);
-
-    Usuario obtenerUsusarioPorCredenciales(Usuario usuario);
 }
 

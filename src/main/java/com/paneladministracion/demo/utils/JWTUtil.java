@@ -26,8 +26,8 @@ public class JWTUtil {
     @Value("${security.jwt.issuer}")
     private String issuer;
 
-    @Value("${security.jwt.ttlMillis}")
-    private long ttlMillis;
+//    @Value("${security.jwt.ttlMillis}")
+//    private long ttlMillis;
 
     private final Logger log = LoggerFactory
             .getLogger(JWTUtil.class);
@@ -51,15 +51,15 @@ public class JWTUtil {
         byte[] apiKeySecretBytes = Base64.getDecoder().decode(key);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-        //  set the JWT Claims
+        //  set the JWT Claims without expiration
         JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject).setIssuer(issuer)
                 .signWith(signatureAlgorithm, signingKey);
-
-        if (ttlMillis >= 0) {
-            long expMillis = nowMillis + ttlMillis;
-            Date exp = new Date(expMillis);
-            builder.setExpiration(exp);
-        }
+        //  set the JWT Claims
+//        if (ttlMillis >= 0) {
+//            long expMillis = nowMillis + ttlMillis;
+//            Date exp = new Date(expMillis);
+//            builder.setExpiration(exp);
+//        }
 
         // Builds the JWT and serializes it to a compact, URL-safe string
         return builder.compact();

@@ -1,10 +1,12 @@
-package com.paneladministracion.demo.repository;
+package com.paneladministracion.demo.service;
 
 import com.paneladministracion.demo.models.Usuario;
+import com.paneladministracion.demo.repository.IUsuarioRepository;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,28 +14,24 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class UsuarioRepository implements IUsuarioRepository{
+public class UsuarioService{
+    @Autowired
+    private IUsuarioRepository iUsuarioRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Override
     public List<Usuario> obtenerUsuarios() {
-        String query = "FROM Usuario";
-        return entityManager.createQuery(query).getResultList();
+        return iUsuarioRepository.findAll();
     }
 
-    @Override
     public void eliminarUsuario(Long id) {
-        Usuario usuario = entityManager.find(Usuario.class, id);
-        entityManager.remove(usuario);
+        iUsuarioRepository.deleteById(id);
     }
 
-    @Override
     public void registrarUsuario(Usuario usuario) {
-        entityManager.merge(usuario);
+        iUsuarioRepository.save(usuario);
     }
 
-    @Override
     public Usuario obtenerUsusarioPorCredenciales(Usuario usuario) {
         String query = "FROM Usuario WHERE email = :email";
         List<Usuario> usuariosEncontrados = entityManager.createQuery(query)
